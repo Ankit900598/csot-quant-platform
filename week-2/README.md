@@ -21,14 +21,14 @@ python3 data/gen_trace.py --accesses 5000000 --seed 42 --out data/large.trace
 
 ## Hardware
 
-WSL2 Ubuntu 24.04, g++ 13.3.0, Intel laptop (Windows host).
+Windows 11, MSYS2 g++ 15.2.0, judge build (`-O3 -march=x86-64-v2`).
 
 ## Results (judge flags, 5M-access trace, seed 42)
 
 | Metric | Value |
 |--------|-------|
-| `run()` wall-clock | 240,617,370 ns |
-| Throughput | 20.78 M acc/s |
+| `run()` wall-clock | 219,352,800 ns |
+| Throughput | 22.79 M acc/s |
 
 ## Submit
 
