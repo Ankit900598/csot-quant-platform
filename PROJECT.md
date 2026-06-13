@@ -1,11 +1,9 @@
-# csot-quant-platform
+# Submission map
 
-| Week | Path | Dashboard upload | Status |
-|------|------|------------------|--------|
-| 1 | `week-1/` | `spec_strategy.so` | starter + samples |
-| 2 | `week-2/` | `cache_sim.cpp` | complete (tiny golden pass) |
-| 3 | `week-3/` | TBD | not started |
-| 4 | `week-4/` | TBD | not started |
-| 5 | `week-5/` | TBD | not started |
+| Week | Path | GitHub | Dashboard file |
+|------|------|--------|----------------|
+| 1 | `week-1/` | starter | `spec_strategy.so` |
+| 2 | `week-2/` | complete | `cache_sim.cpp` |
+| 3–5 | `week-3/` … | TBD | TBD |
 
-Leaderboard: https://csot-low-latency.devclub.in/dashboard/
+Repo URL: https://github.com/Ankit900598/csot-quant-platform

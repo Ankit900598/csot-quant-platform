@@ -1,0 +1,12 @@
+# Build artifacts (any week)
+build/
+build-*/
+**/build/
+**/build-*/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*~
