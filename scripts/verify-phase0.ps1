@@ -16,7 +16,12 @@ Write-Host "`n=== Windows toolchain (MSYS2 ucrt64 on PATH) ===" -ForegroundColor
 }
 
 Write-Host "`n=== WSL Ubuntu toolchain ===" -ForegroundColor Cyan
-wsl -d Ubuntu -- bash -lc "echo g++: \$(g++ --version 2>/dev/null | head -1 || echo MISSING); echo cmake: \$(cmake --version 2>/dev/null | head -1 || echo MISSING); echo python3: \$(python3 --version 2>/dev/null || echo MISSING); echo perf: \$(perf --version 2>/dev/null | head -1 || echo MISSING); echo valgrind: \$(valgrind --version 2>/dev/null | head -1 || echo MISSING); echo benchmark: \$(dpkg -l libbenchmark-dev 2>/dev/null | tail -1 || echo MISSING)"
+$wslTools = @("g++ --version", "cmake --version", "python3 --version", "perf --version", "valgrind --version", "dpkg -l libbenchmark-dev")
+foreach ($cmd in $wslTools) {
+  Write-Host ("`n[{0}]" -f ($cmd -split ' ' | Select-Object -First 1)) -ForegroundColor Yellow
+  $out = wsl -d Ubuntu -- bash -lc $cmd 2>&1
+  if ($LASTEXITCODE -ne 0) { Write-Host "MISSING" } else { $out | Select-Object -First 2 }
+}
 
 Write-Host "`nIf WSL packages show MISSING, run:" -ForegroundColor Green
 Write-Host "  wsl -d Ubuntu bash /mnt/c/Users/HP/Projects/csot-quant-platform/scripts/setup-wsl-phase0.sh"

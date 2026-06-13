@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Week 1 Phase 0 — install Linux toolchain inside WSL Ubuntu.
-# Run once from PowerShell:
+#
+# If you are ALREADY inside Ubuntu (prompt like ankit@LAPTOP...$), run:
+#   bash /mnt/c/Users/HP/Projects/csot-quant-platform/scripts/setup-wsl-phase0.sh
+#
+# If you are in Windows PowerShell, run:
 #   wsl -d Ubuntu bash /mnt/c/Users/HP/Projects/csot-quant-platform/scripts/setup-wsl-phase0.sh
 
 set -euo pipefail
@@ -8,7 +12,7 @@ set -euo pipefail
 echo "==> Updating apt package lists..."
 sudo apt-get update -qq
 
-echo "==> Installing Week 1 toolchain packages..."
+echo "==> Installing Week 1 toolchain packages (core)..."
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
   build-essential \
   cmake \
@@ -18,10 +22,27 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
   python3-venv \
   linux-tools-common \
   linux-tools-generic \
-  "linux-tools-$(uname -r)" \
   libbenchmark-dev \
   valgrind \
   kcachegrind
+
+# WSL2 uses a Microsoft kernel — linux-tools-$(uname -r) is often NOT in apt.
+# Do not let that block cmake/valgrind/benchmark (the Week 1 checklist items).
+KT="linux-tools-$(uname -r)"
+echo "==> Optional: kernel-matched perf tools ($KT)..."
+if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "$KT" 2>/dev/null; then
+  echo "    (skipped — normal on WSL2; will try generic perf symlink below)"
+fi
+
+if ! command -v perf >/dev/null 2>&1; then
+  PERF_BIN="$(find /usr/lib/linux-tools -name perf -type f 2>/dev/null | head -1 || true)"
+  if [[ -n "$PERF_BIN" ]]; then
+    echo "==> Linking perf from $PERF_BIN"
+    sudo ln -sf "$PERF_BIN" /usr/local/bin/perf
+  else
+    echo "    WARNING: perf not found. Week 1 code still works; perf numbers may be unavailable on WSL2."
+  fi
+fi
 
 echo "==> Installing Python packages for Phase 2 experiments (optional plots)..."
 python3 -m pip install --user matplotlib
@@ -38,7 +59,7 @@ g++ --version | head -1
 cmake --version | head -1
 python3 --version
 git --version
-perf --version | head -1
+if command -v perf >/dev/null 2>&1; then perf --version | head -1; else echo "perf: NOT AVAILABLE (WSL2 limitation)"; fi
 valgrind --version | head -1
 dpkg -l libbenchmark-dev | tail -1
 command -v kcachegrind || true

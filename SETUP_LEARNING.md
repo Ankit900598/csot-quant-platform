@@ -52,9 +52,19 @@ Already present before setup:
 
 ### On WSL (you run once — needs sudo password)
 
+**Already inside Ubuntu** (`ankit@LAPTOP...$` prompt):
+
+```bash
+bash /mnt/c/Users/HP/Projects/csot-quant-platform/scripts/setup-wsl-phase0.sh
+```
+
+**From Windows PowerShell** (not from inside Ubuntu):
+
 ```powershell
 wsl -d Ubuntu bash /mnt/c/Users/HP/Projects/csot-quant-platform/scripts/setup-wsl-phase0.sh
 ```
+
+Do **not** run `wsl -d Ubuntu ...` from inside Ubuntu — that is a Windows-only command.
 
 That script installs: `build-essential`, `cmake`, `perf`, `valgrind`, `libbenchmark-dev`, `kcachegrind`, and Python `matplotlib` for optional plots.
 
